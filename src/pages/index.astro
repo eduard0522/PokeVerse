@@ -1,0 +1,30 @@
+---
+import type { PokemonListResponse } from '../assets/interfaces/pokemon-list-response'
+import Layout from '../layouts/Layout.astro'
+import PokemonCard from '../components/pokemons/PokemonCard.astro'
+
+const data = await fetch('https://pokeapi.co/api/v2/pokemon')
+const pokemons = (await data.json()) as PokemonListResponse
+---
+
+<Layout title='PokeCards'>
+  <header class="mx-auto text-center">
+    <h1
+      class='py-12
+					text-5xl font-bold bg-clip-text text-transparent text-center
+					bg-gradient-to-br from-cyan-50 to-cyan-300 inline-block'
+    >
+      PokeCards
+    </h1>
+  </header>
+  <main class='text-slate-100 min-h-screen'>
+    <h2 class="text-4xl font-semibold py-4 text-center"> Nuestros Pokémones disponibles</h2>
+    <ul class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-4	">
+      {
+        pokemons.results.map(({ name, url }) => (
+          <PokemonCard name={name} url={url} />
+        ))
+      }
+    </ul>
+  </main>
+</Layout>
