@@ -1,7 +1,4 @@
 ---
-
-const currentPage = Astro.url.pathname;
-
 import type { GetStaticPaths } from "astro";
 import type { PokemonListResponse } from '../../assets/interfaces/pokemon-list-response'
 import Layout from '../../layouts/Layout.astro'
@@ -34,7 +31,7 @@ const {page} = Astro.props
         page.data.map(({ name, url }) => {
           const pokemonId = url.split("/").at(-2)
           return (
-              <PokemonCard name={name} url={url} currentPage={page.currentPage} id={pokemonId}/>
+              <PokemonCard name={name} url={url}  id={pokemonId}/>
           )
         })
           

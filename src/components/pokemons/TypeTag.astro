@@ -1,0 +1,27 @@
+---
+import { pokemonTypes , typeColors } from 'src/utilities/pokemonTypes'
+
+interface Props {
+  types? : string []
+}
+
+const { types } = Astro.props
+
+---
+
+<div>
+  <ul
+    class='text-slate-100 text-2xl md:text-2xl xl:text-4xl capitalize flex justify-center gap-4 items-center'
+  >
+    {
+      types?.map((type: string) => (
+        <li
+          class={`px-4 py-2 rounded-md text-white font-bold text-center ${typeColors[type]}`}
+        >
+          {' '}
+          {`${pokemonTypes[type]} `}{' '}
+        </li>
+      ))
+    }
+  </ul>
+</div>

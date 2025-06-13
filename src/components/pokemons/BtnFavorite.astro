@@ -1,0 +1,15 @@
+---
+import { Icon } from 'astro-icon/components'
+
+interface Props{
+  name : string
+  id? : string | number
+}
+
+const { name , id } = Astro.props
+
+---
+<button id='btn-favorite' class="text-6xl top-4 absolute right-0 hover:animate-pulse" data-name={name} data-id={id}>
+  <Icon name='heart-fill' class='hidden heart-fill cursor-pointer' />
+  <Icon name='heart-outline' class='heart-outline cursor-pointer' />
+</button>

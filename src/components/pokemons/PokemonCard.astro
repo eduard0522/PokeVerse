@@ -1,6 +1,7 @@
 ---
-import { Icon } from 'astro-icon/components'
-import { pokemonTypes, typeColors } from '../../utilities/pokemonTypes'
+import BtnFavorite from './BtnFavorite.astro'
+import TitleCard from './TitleCard.astro'
+import TypeTag from './TypeTag.astro'
 
 interface Props {
   name: string
@@ -8,16 +9,11 @@ interface Props {
   isBig?: boolean
   description?: string
   types?: string[]
-  currentPage?: number,
-  id? : string | number  
+  id?: string | number
 }
 
-const { name, url, isBig, description, types, currentPage , id } = Astro.props
-
-const afterPage = currentPage
-
+const { name, url, isBig, description, types, id } = Astro.props
 const pokemonId = url.split('/').at(-2)
-
 const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemonId}.png`
 ---
 
@@ -28,16 +24,7 @@ const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprit
   p-2 rounded-2xl'
 >
   <div class='relative'>
-    {
-      isBig ? (
-        <button id='btn-favorite'  data-name={name} data-id={id}>
-          <Icon name='heart-fill' class='hidden heart-fill' />
-          <Icon name='heart-outline' class="heart-outline" />
-        </button>
-      ) : (
-        ''
-      )
-    }
+    {isBig ? <BtnFavorite name={name} id={id} /> : ''}
     <img
       transition:name={`${name}-image`}
       src={imageUrl}
@@ -49,33 +36,8 @@ const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprit
       ]}
     />
   </div>
-  {
-    isBig ? (
-      <div>
-        <ul class='text-slate-100 text-2xl md:text-2xl xl:text-4xl  capitalize flex justify-center gap-4 items-center'>
-          {types?.map((type: string) => (
-            <li
-              class={`px-4 py-2 rounded-md text-white font-bold text-center ${typeColors[type]}`}
-            >
-              {' '}
-              {`${pokemonTypes[type]} `}{' '}
-            </li>
-          ))}
-        </ul>
-      </div>
-    ) : (
-      ''
-    )
-  }
-  <h3
-    class:list={[
-      `text-2xl  text-center font-bold  capitalize 
-        bg-gradient-to-br from-slate-100 to-sky-400 bg-clip-text text-transparent`,
-      { 'text-4xl mt-4': isBig },
-    ]}
-  >
-    {name}
-  </h3>
+  {isBig ? <TypeTag types={types} /> : ''}
+  <TitleCard name={name} isBig={isBig} />
   <p
     class='text-xl md:text-2xl xl:text-4xl py-4 text-center text-slate-100 max-w-3xl'
   >
@@ -83,82 +45,77 @@ const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprit
   </p>
 </a>
 
-<style>
-  @reference "tailwindcss";
-  #btn-favorite {
-    @apply text-6xl top-4 absolute right-0 hover:animate-pulse;
-  }
-</style>
-
 <script>
-
   interface Favorite {
-    pokemonId : string
-    pokemonName : string
+    pokemonId: string
+    pokemonName: string
   }
 
-  const setFavorite = (pokemonName : string , pokemonId : string ) => {
-    console.log("ENTRING");
-    
-    const storedFavorites =  localStorage.getItem("favorites")
-     let favoritesArray = storedFavorites ? JSON.parse(storedFavorites).favorites  : []
-     if(!favoritesArray || favoritesArray.length <= 0){
-      const newFavorites = {
-      favorites: [
-        { pokemonName,
-        pokemonId }
-      ]
-      }
-      return  localStorage.setItem("favorites" , JSON.stringify(newFavorites))
+  const getStoredFavorites = () => {
+    const storedFavorites = localStorage.getItem('favorites')
+    let favoritesArray = storedFavorites
+      ? JSON.parse(storedFavorites).favorites
+      : []
+    return favoritesArray
+  }
+
+  const setStoredFavorites = (newStored: Favorite[]): void => {
+    localStorage.setItem('favorites', JSON.stringify({ favorites: newStored }))
+  }
+
+  const validateFavorite = (pokemonId: string) => {
+    let storedFavorites = getStoredFavorites()
+    const isFavorite = storedFavorites?.some(
+      (pokemon: Favorite) => pokemon.pokemonId === pokemonId
+    )
+    return isFavorite
+  }
+
+  const handleFavorite = (pokemonName: string, pokemonId: string) => {
+    let storedFavorites = getStoredFavorites()
+
+    const isFavorite = validateFavorite(pokemonId)
+    if (!isFavorite) {
+      storedFavorites.push({ pokemonName, pokemonId })
+    } else {
+      storedFavorites = storedFavorites.filter(
+        (fav: Favorite) => fav.pokemonId !== pokemonId
+      )
     }
-      const isFavorite = validateFavorite(pokemonId)
-
-      if(isFavorite){
-        console.log("es favorito")
-        const newArray = favoritesArray.filter((fav:Favorite) => fav.pokemonId !== pokemonId)
-         return localStorage.setItem("favorites" , JSON.stringify({favorites:newArray}))
-      }
-
-      favoritesArray.push({pokemonName , pokemonId})
-      localStorage.setItem("favorites" , JSON.stringify({favorites:favoritesArray}))
+    setStoredFavorites(storedFavorites)
   }
 
-  const validateFavorite = ( pokemonId: string) => {
-     const storedFavorites =  localStorage.getItem("favorites")
-     let favoritesArray = storedFavorites ? JSON.parse(storedFavorites).favorites  : []
+  const setClassListHidden = (pokemonId: string): void => {
+    const heartFill = document.querySelector('.heart-fill')
+    const heartOutline = document.querySelector('.heart-outline')
+    const isFavorite = validateFavorite(pokemonId)
 
-     if(favoritesArray?.length <= 0){
-      return
-     }else{
-     const isFavorite = favoritesArray.some( (pokemon : Favorite) => pokemon.pokemonId === pokemonId )
-     if(isFavorite) return true
-     }
-     return false
+    if (!heartOutline || !heartFill) return
+
+    if (isFavorite) {
+      heartFill.classList.remove('hidden')
+      heartOutline.classList.add('hidden')
+    } else {
+      heartFill.classList.add('hidden')
+      heartOutline.classList.remove('hidden')
+    }
   }
- 
+
   const handlePageLoad = () => {
-    const btnFavorite = document.querySelector("#btn-favorite")
+    const btnFavorite = document.querySelector('#btn-favorite')
 
-    if(!btnFavorite || !(btnFavorite instanceof HTMLButtonElement)) return
+    if (!btnFavorite || !(btnFavorite instanceof HTMLButtonElement)) return
 
     const pokemonName = btnFavorite.dataset.name
     const pokemonId = btnFavorite.dataset.id
 
-    if(!pokemonId || !pokemonName) return
+    if (!pokemonId || !pokemonName) return
+    setClassListHidden(pokemonId)
 
-    const isFavorite = validateFavorite(pokemonId)
-
-    const heartFill = document.querySelector(".heart-fill")
-    const heartOutline = document.querySelector(".heart-outline")
-
-    if(isFavorite){
-      heartFill?.classList.toggle("hidden")
-      heartOutline?.classList.toggle("hidden")
-    }
-    btnFavorite.addEventListener('click' , () => { setFavorite(pokemonName, pokemonId)})
+    btnFavorite.addEventListener('click', () => {
+      handleFavorite(pokemonName, pokemonId)
+    })
   }
 
-  document.addEventListener('astro:page-load' , handlePageLoad)
-  
-
+  document.addEventListener('astro:page-load', handlePageLoad)
 </script>
