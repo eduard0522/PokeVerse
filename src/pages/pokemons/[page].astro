@@ -1,9 +1,11 @@
 ---
+
+const currentPage = Astro.url.pathname;
+
 import type { GetStaticPaths } from "astro";
 import type { PokemonListResponse } from '../../assets/interfaces/pokemon-list-response'
 import Layout from '../../layouts/Layout.astro'
-import PokemonCard from '../../components/pokemons/PokemonCard.astro'
-
+import PokemonCard from "@components/pokemons/PokemonCard.astro";
 
 export const getStaticPaths = ( async({paginate}) => {
   const data = await fetch('https://pokeapi.co/api/v2/pokemon?limit=151')
@@ -12,6 +14,7 @@ export const getStaticPaths = ( async({paginate}) => {
 }) satisfies GetStaticPaths;
 
 const {page} = Astro.props
+
 ---
 
 <Layout title='PokeCards'>
@@ -28,9 +31,13 @@ const {page} = Astro.props
     <h2 class="text-4xl font-semibold py-4 text-center"> Nuestros Pokémones disponibles</h2>
     <ul class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-2	">
       {
-        page.data.map(({ name, url }) => (
-          <PokemonCard name={name} url={url} />
-        ))
+        page.data.map(({ name, url }) => {
+          const pokemonId = url.split("/").at(-2)
+          return (
+              <PokemonCard name={name} url={url} currentPage={page.currentPage} id={pokemonId}/>
+          )
+        })
+          
       }
     </ul>
 

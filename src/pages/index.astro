@@ -5,6 +5,7 @@ import PokemonCard from '../components/pokemons/PokemonCard.astro'
 
 const data = await fetch('https://pokeapi.co/api/v2/pokemon')
 const pokemons = (await data.json()) as PokemonListResponse
+
 ---
 
 <Layout title='PokeCards'>
@@ -27,4 +28,8 @@ const pokemons = (await data.json()) as PokemonListResponse
       }
     </ul>
   </main>
+  <script>
+  window.location.href = "/pokemons/1";
+</script>
+
 </Layout>

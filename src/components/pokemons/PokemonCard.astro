@@ -1,5 +1,6 @@
 ---
-import  { pokemonTypes, typeColors } from '../../utilities/pokemonTypes'
+import { Icon } from 'astro-icon/components'
+import { pokemonTypes, typeColors } from '../../utilities/pokemonTypes'
 
 interface Props {
   name: string
@@ -7,8 +8,13 @@ interface Props {
   isBig?: boolean
   description?: string
   types?: string[]
+  currentPage?: number,
+  id? : string | number  
 }
-const { name, url, isBig, description, types } = Astro.props
+
+const { name, url, isBig, description, types, currentPage , id } = Astro.props
+
+const afterPage = currentPage
 
 const pokemonId = url.split('/').at(-2)
 
@@ -16,21 +22,33 @@ const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprit
 ---
 
 <a
+  id='card'
   href=`/pokemons/${name}`
   class='flex- flex-col items-center justify-center group transition-all
   p-2 rounded-2xl'
 >
-  <img
-    transition:name={`${name}-image`}
-    src={imageUrl}
-    alt=`Pokemon ${name}`
-    class:list={[
-      'mx-auto transition-all h-48',
-      { 'group-hover:scale-110': !isBig },
-      { 'w-2xl h-auto': isBig },
-    ]}
-  />
-
+  <div class='relative'>
+    {
+      isBig ? (
+        <button id='btn-favorite'  data-name={name} data-id={id}>
+          <Icon name='heart-fill' class='hidden heart-fill' />
+          <Icon name='heart-outline' class="heart-outline" />
+        </button>
+      ) : (
+        ''
+      )
+    }
+    <img
+      transition:name={`${name}-image`}
+      src={imageUrl}
+      alt=`Pokemon ${name}`
+      class:list={[
+        'mx-auto transition-all h-48',
+        { 'group-hover:scale-110': !isBig },
+        { 'w-2xl h-auto': isBig },
+      ]}
+    />
+  </div>
   {
     isBig ? (
       <div>
@@ -58,7 +76,89 @@ const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprit
   >
     {name}
   </h3>
-  <p class=' text-xl md:text-2xl xl:text-4xl py-4 text-center text-slate-100 max-w-3xl'>
+  <p
+    class='text-xl md:text-2xl xl:text-4xl py-4 text-center text-slate-100 max-w-3xl'
+  >
     {description}
   </p>
 </a>
+
+<style>
+  @reference "tailwindcss";
+  #btn-favorite {
+    @apply text-6xl top-4 absolute right-0 hover:animate-pulse;
+  }
+</style>
+
+<script>
+
+  interface Favorite {
+    pokemonId : string
+    pokemonName : string
+  }
+
+  const setFavorite = (pokemonName : string , pokemonId : string ) => {
+    console.log("ENTRING");
+    
+    const storedFavorites =  localStorage.getItem("favorites")
+     let favoritesArray = storedFavorites ? JSON.parse(storedFavorites).favorites  : []
+     if(!favoritesArray || favoritesArray.length <= 0){
+      const newFavorites = {
+      favorites: [
+        { pokemonName,
+        pokemonId }
+      ]
+      }
+      return  localStorage.setItem("favorites" , JSON.stringify(newFavorites))
+    }
+      const isFavorite = validateFavorite(pokemonId)
+
+      if(isFavorite){
+        console.log("es favorito")
+        const newArray = favoritesArray.filter((fav:Favorite) => fav.pokemonId !== pokemonId)
+         return localStorage.setItem("favorites" , JSON.stringify({favorites:newArray}))
+      }
+
+      favoritesArray.push({pokemonName , pokemonId})
+      localStorage.setItem("favorites" , JSON.stringify({favorites:favoritesArray}))
+  }
+
+  const validateFavorite = ( pokemonId: string) => {
+     const storedFavorites =  localStorage.getItem("favorites")
+     let favoritesArray = storedFavorites ? JSON.parse(storedFavorites).favorites  : []
+
+     if(favoritesArray?.length <= 0){
+      return
+     }else{
+     const isFavorite = favoritesArray.some( (pokemon : Favorite) => pokemon.pokemonId === pokemonId )
+     if(isFavorite) return true
+     }
+     return false
+  }
+ 
+  const handlePageLoad = () => {
+    const btnFavorite = document.querySelector("#btn-favorite")
+
+    if(!btnFavorite || !(btnFavorite instanceof HTMLButtonElement)) return
+
+    const pokemonName = btnFavorite.dataset.name
+    const pokemonId = btnFavorite.dataset.id
+
+    if(!pokemonId || !pokemonName) return
+
+    const isFavorite = validateFavorite(pokemonId)
+
+    const heartFill = document.querySelector(".heart-fill")
+    const heartOutline = document.querySelector(".heart-outline")
+
+    if(isFavorite){
+      heartFill?.classList.toggle("hidden")
+      heartOutline?.classList.toggle("hidden")
+    }
+    btnFavorite.addEventListener('click' , () => { setFavorite(pokemonName, pokemonId)})
+  }
+
+  document.addEventListener('astro:page-load' , handlePageLoad)
+  
+
+</script>

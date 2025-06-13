@@ -4,11 +4,12 @@ import type { PokemonType } from "../assets/interfaces/pokemon-type";
 
 
 export const getPokemonData = async (paramReturn:string) => {
-  const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
-  const { results } = await response.json() as PokemonListResponse;
+  try{
+    const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
+    const { results } = await response.json() as PokemonListResponse;
 
-  const pokemonData = await Promise.all(
-    results.map(async ({ name, url }) => {
+     const pokemonData = await Promise.all(
+     results.map(async ({ name, url }) => {
       // Obtener descripción
       const pokemonDataRequest = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${name}`);
       const pokemonDataResponse = await pokemonDataRequest.json();
@@ -21,7 +22,6 @@ export const getPokemonData = async (paramReturn:string) => {
       const types: string[] = typesPokemon.types.map((type : PokemonType) => type.type.name);
 
       const pokemonId = url.split("/").at(-2)
-      console.log( pokemonId )
 
       const paramReturnValidator = paramReturn === "name"
       const paramsReturn = paramReturnValidator ? { name : name} : {id: pokemonId}
@@ -41,4 +41,17 @@ export const getPokemonData = async (paramReturn:string) => {
   );
 
   return pokemonData;
+  }catch(e){
+   return [{
+        params: {name : "pikachu"} ,
+        props: { 
+          name : "", 
+          url : "", 
+          descripcion: "Descripción no disponible",
+          types:[],
+          id : 1
+        } 
+      }];
+  }
+ 
 };

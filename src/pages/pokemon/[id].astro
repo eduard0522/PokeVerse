@@ -11,13 +11,13 @@ export const getStaticPaths = ( async () => {
 }) satisfies GetStaticPaths;
 
 const { name , url , descripcion , types , id } = Astro.props
-
+const currentPage = Astro.url.pathname;
 ---
 
-<Layout title={ id ? id : ''}>
+<Layout title= { id ? id : ''}>
   <section aria-label=`Datos de Pokémon ${name}` class="flex flex-col justify-center items-center gap-4  pb-12">
       <div class="flex flex-col">
-         <PokemonCard  name={name} url={url} isBig  description = {descripcion} types = {types}/>
+         <PokemonCard  name={name} url={url} isBig  description = {descripcion} types = {types} />
       </div>
       <div class="flex items-center justify-center w-full">
         <a href="/" class="text-2xl bg-clip-text text-transparent bg-gradient-to-br from-sky-200 to-sky-400 py-1 px-4 rounded-2xl underline "> Ver lista </a>
