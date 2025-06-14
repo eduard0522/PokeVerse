@@ -1,35 +1,40 @@
 ---
-import type { PokemonListResponse } from '../assets/interfaces/pokemon-list-response'
 import Layout from '../layouts/Layout.astro'
-import PokemonCard from '../components/pokemons/PokemonCard.astro'
-
-const data = await fetch('https://pokeapi.co/api/v2/pokemon')
-const pokemons = (await data.json()) as PokemonListResponse
-
+const title = "PokéVerse Ultimate";
+const description = "Descubre, explora y guarda tus Pokémon favoritos con una interfaz rápida y moderna.";
 ---
 
 <Layout title='PokeCards'>
-  <header class="mx-auto text-center">
-    <h1
-      class='py-12
-					text-5xl font-bold bg-clip-text text-transparent text-center
-					bg-gradient-to-br from-cyan-50 to-cyan-300 inline-block'
-    >
-      PokeCards
-    </h1>
-  </header>
-  <main class='text-slate-100 min-h-screen'>
-    <h2 class="text-4xl font-semibold py-4 text-center"> Nuestros Pokémones disponibles</h2>
-    <ul class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-4	">
-      {
-        pokemons.results.map(({ name, url }) => (
-          <PokemonCard name={name} url={url} />
-        ))
-      }
-    </ul>
-  </main>
-  <script>
-  window.location.href = "/pokemons/1";
-</script>
+    <div class="max-w-4xl mx-auto text-center flex flex-col items-center justify-center min-h-screen">
+    <h1 class="text-5xl bg-clip-text text-transparent bg-gradient-to-br from-sky-50 to-sky-800 font-bold">{title}</h1>
+    <p class="text-lg text-zinc-300 mt-4">{description}</p>
+    
+    <section class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="p-6 bg-gradient-to-br from-gray-950 to-cyan-950 rounded-lg shadow-lg">
+        <h2 class="text-2xl text-zinc-100 font-semibold">Consulta rápida de Pokémon</h2>
+        <p class="mt-2 text-zinc-300">Obtén detalles clave en segundos sobre cada Pokémon.</p>
+      </div>
+      
+      <div class="p-6 bg-gradient-to-br from-gray-950 to-cyan-950 rounded-lg shadow-lg">
+        <h2 class="text-2xl text-zinc-100 font-semibold">Favoritos personalizados</h2>
+        <p class="mt-2 text-zinc-300">Guarda y organiza los Pokémon que más te gustan.</p>
+      </div>
 
+      <div class="p-6 bg-gradient-to-br from-gray-950 to-cyan-950 rounded-lg shadow-lg">
+        <h2 class="text-2xl text-zinc-100 font-semibold">Diseño interactivo</h2>
+        <p class="mt-2 text-zinc-300">Navega fácilmente con una interfaz intuitiva.</p>
+      </div>
+
+      <div class="p-6 bg-gradient-to-br from-gray-950 to-cyan-950 rounded-lg shadow-lg">
+        <h2 class="text-2xl text-zinc-100 font-semibold">Altamente optimizada</h2>
+        <p class="mt-2 text-zinc-300">Carga rápida y eficiente para una mejor experiencia.</p>
+      </div>
+    </section>
+
+    <div class="mt-12">
+      <p class="text-lg text-zinc-300">¡Explora el PokéVerse y encuentra tu Pokémon <a href="/favoritos" class="underline text-sky-600"> favorito! </a> </p>
+    </div>
+  </div>
+  
 </Layout>
+

@@ -1,16 +1,10 @@
 ---
-  interface Favorite {
-    pokemonId : string
-    pokemonName : string
-  }
-
+import { Icon } from "astro-icon/components";
+import { FavoritePokemons } from "@components/pokemons/FavoritePokemons";
 import Layout from "@layouts/Layout.astro";
-
 ---
 
 <Layout title="Favoritos" >
-
-  <h1 class="text-4xl text-zinc-100">Favoritos</h1>
-  
-  </div>
+  <h1 class="text-6xl text-zinc-100 py-12 border-b-2 flex justify-between border-sky-600 "> Favoritos <Icon name='heart-fill'/>  </h1>
+  <FavoritePokemons client:only="solid-js" />
 </Layout>

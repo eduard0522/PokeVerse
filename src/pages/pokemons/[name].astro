@@ -1,12 +1,10 @@
 ---
-
-
 import type { GetStaticPaths } from "astro";
-
 
 import Layout from "../../layouts/Layout.astro";
 import PokemonCard from "../../components/pokemons/PokemonCard.astro";
 import {getPokemonData } from "..//../utilities/getData"
+
 
 export const getStaticPaths = ( async () => {
   const paths = await getPokemonData("name")
@@ -24,6 +22,7 @@ const { name , url , descripcion , types , id  } = Astro.props
       <div class="flex items-center justify-center w-full">
        <button class="text-sky-400 text-2xl cursor-pointer hover:text-sky-600"  onclick="history.back()">  Regresar </button>
     </div>
+
   </section>
  
 </Layout>

@@ -32,24 +32,21 @@ const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprit
       class:list={[
         'mx-auto transition-all h-48',
         { 'group-hover:scale-110': !isBig },
-        { 'w-2xl h-auto': isBig },
+        { 'w-xl h-auto': isBig },
       ]}
     />
   </div>
-  {isBig ? <TypeTag types={types} /> : ''}
   <TitleCard name={name} isBig={isBig} />
+  {isBig ? <TypeTag types={types} /> : ''}
   <p
-    class='text-xl md:text-2xl xl:text-4xl py-4 text-center text-slate-100 max-w-3xl'
+    class='text-xl md:text-2xl xl:text-3xl py-4 text-center text-slate-100 max-w-3xl'
   >
     {description}
   </p>
 </a>
 
 <script>
-  interface Favorite {
-    pokemonId: string
-    pokemonName: string
-  }
+import type { FavoritePokemon as Favorite } from "../../interfaces/FavoritePokemon"
 
   const getStoredFavorites = () => {
     const storedFavorites = localStorage.getItem('favorites')
