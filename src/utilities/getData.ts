@@ -16,11 +16,13 @@ export const getPokemonData = async (paramReturn:string) => {
       const flavorTextEntries: FlavorTextEntry[] = pokemonDataResponse.flavor_text_entries;
       const entry = flavorTextEntries.find(entry => entry.language.name === "es");
 
-      // Obtener tipos
-      const requestTypes = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
-      const typesPokemon = await requestTypes.json();
-      const types: string[] = typesPokemon.types.map((type : PokemonType) => type.type.name);
-
+      // Obtener tipos, peso y altura
+      const requestPokemon = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
+      const dataPokemon = await requestPokemon.json();
+      const types: string[] = dataPokemon.types.map((type : PokemonType) => type.type.name);
+      
+      const pokemonHeight = dataPokemon.height
+      const pokemonWeight = dataPokemon.weight
       const pokemonId = url.split("/").at(-2)
 
       const paramReturnValidator = paramReturn === "name"
@@ -34,7 +36,9 @@ export const getPokemonData = async (paramReturn:string) => {
           url, 
           descripcion: entry ? entry.flavor_text.replace(/\n/g, " ") : "Descripción no disponible",
           types,
-          id : pokemonId
+          id : pokemonId,
+          height : pokemonHeight,
+          weight : pokemonWeight
         } 
       };
     })

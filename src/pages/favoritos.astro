@@ -2,9 +2,12 @@
 import { Icon } from "astro-icon/components";
 import { FavoritePokemons } from "@components/pokemons/FavoritePokemons";
 import Layout from "@layouts/Layout.astro";
+import Title from "@components/titles/Title.astro";
 ---
 
 <Layout title="Favoritos" >
-  <h1 class="text-6xl text-zinc-100 py-12 border-b-2 flex justify-between border-sky-600 "> Favoritos <Icon name='heart-fill'/>  </h1>
+  <div>
+    <Title title="Favoritos"> <Icon name="heart-fill" class="inline-block"/>  </Title>
+  </div>
   <FavoritePokemons client:only="solid-js" />
 </Layout>

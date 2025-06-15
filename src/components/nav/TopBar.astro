@@ -1,12 +1,30 @@
 ---
 import AnchortTag from './AnchorTag.astro'
+
+const items = [
+  {content : "inicio " , path:"/"},
+  {content : "PokéVerse" , path:"/pokemons/1"},
+  {content : "favoritos" , path:"/favoritos"},
+]
+
 ---
 
-<nav class='shadow'>
-  <div class='container flex items-center justify-center gap-4 p-6 mx-auto'>
-    <AnchortTag content='Inicio' path='/' />
-    <AnchortTag content='PokéVerse' path='/pokemons/1' />
-    <AnchortTag content='Favoritos' path='/favoritos' />
- 
+<nav class='nav-bar'>
+  <div class='container flex items-center justify-center gap-12 p-6 mx-auto'>
+    {
+      items.map((item) => <AnchortTag content={item.content} path={item.path} />)
+    }
   </div>
 </nav>
+
+<style>
+  .nav-bar{
+    background-color: #070718;
+    border-width:  1px ;
+    border-color: rgb(55, 58, 60);
+    border-radius: 8px;
+    box-shadow: 2px 1px 20px  rgba(12, 201, 249, 0.892), -2px -1px 4px rgba(107, 192, 213, 0.892);
+    max-width: 1440px;
+    margin-inline: auto;
+  }
+</style>

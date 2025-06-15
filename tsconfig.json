@@ -18,6 +18,9 @@
       ],
       "@styles/*": [
         "./src/styles/*"
+      ],
+      "@assets/*":[
+        "./src/assets*"
       ]
     },
     "jsx": "preserve",

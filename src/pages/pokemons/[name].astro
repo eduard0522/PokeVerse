@@ -2,8 +2,8 @@
 import type { GetStaticPaths } from "astro";
 
 import Layout from "../../layouts/Layout.astro";
-import PokemonCard from "../../components/pokemons/PokemonCard.astro";
 import {getPokemonData } from "..//../utilities/getData"
+import PokemonCardDescription from "@components/pokemons/PokemonCardDescription.astro";
 
 
 export const getStaticPaths = ( async () => {
@@ -11,18 +11,12 @@ export const getStaticPaths = ( async () => {
   return paths
 }) satisfies GetStaticPaths;
 
-const { name , url , descripcion , types , id  } = Astro.props
+const { name , url , descripcion , types , id , height , weight } = Astro.props
 
 ---
 <Layout title=`Pokémon - #${id} ${name}` description= `Información sobre el pokémon ${name}` srcImage={url}>
   <section aria-label=`Datos de Pokémon ${name}` class="flex flex-col justify-center items-center gap-4  pb-12">
-      <div class="flex flex-col">
-         <PokemonCard  name={name} url={url} isBig  description = {descripcion} types = {types} id={id} />
-      </div>
-      <div class="flex items-center justify-center w-full">
-       <button class="text-sky-400 text-2xl cursor-pointer hover:text-sky-600"  onclick="history.back()">  Regresar </button>
-    </div>
-
+      <PokemonCardDescription  name={name} url={url} isBig  description = {descripcion} types = {types} id={id} height={height} weight={weight} />
   </section>
  
 </Layout>

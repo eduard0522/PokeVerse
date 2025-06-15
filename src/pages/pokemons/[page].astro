@@ -3,7 +3,7 @@ import type { GetStaticPaths } from 'astro'
 import type { PokemonListResponse } from '../../interfaces/pokemon-list-response'
 import Layout from '../../layouts/Layout.astro'
 import PokemonCard from '@components/pokemons/PokemonCard.astro'
-import { Counter } from '@components/solid/Counter'
+import Title from '@components/titles/Title.astro'
 
 export const getStaticPaths = (async ({ paginate }) => {
   const data = await fetch('https://pokeapi.co/api/v2/pokemon?limit=151')
@@ -16,21 +16,14 @@ const { page } = Astro.props
 
 <Layout title='PokeCards'>
   <header class='mx-auto text-center'>
-    <h1
-      class='pt-12 pb-4 mb-8
-					text-5xl font-bold bg-clip-text text-transparent text-center
-					bg-gradient-to-br from-cyan-50 to-cyan-300 inline-block border-b-3 border-sky-600'
-    >
-      PokeCards
-    </h1>
+    <Title title='Busca tu favorito' />
   </header>
   <main class='text-slate-100 min-h-screen'>
-
     <ul class='grid grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-2'>
       {
         page.data.map(({ name, url }) => {
           const pokemonId = url.split('/').at(-2)
-          return <PokemonCard name={name} url={url} id={pokemonId} />
+          return <PokemonCard name={name} url={url} />
         })
       }
     </ul>

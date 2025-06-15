@@ -1,25 +1,30 @@
 ---
-import { pokemonTypes , typeColors } from 'src/utilities/pokemonTypes'
+import { boolean } from 'astro:schema'
+import { pokemonTypes } from 'src/utilities/pokemonTypes'
 
 interface Props {
-  types? : string []
+  types?: string[]
+  columns?: boolean
 }
 
-const { types } = Astro.props
-
+const { types , columns } = Astro.props
 ---
 
-<div>
+<div class="mx-auto">
   <ul
-    class='text-slate-100 text-2xl md:text-2xl xl:text-4xl capitalize flex justify-center gap-4 items-center'
+    class:list={['text-slate-100 capitalize flex justify-center gap-2 items-center' , {'grid grid-cols-2' : columns}]}
   >
     {
       types?.map((type: string) => (
         <li
-          class={`px-4 py-2 rounded-md text-white font-bold text-center ${typeColors[type]}`}
+          class={`px-4 py-2 text-lg rounded-md text-white font-bold text-center`}
         >
-          {' '}
-          {`${pokemonTypes[type]} `}{' '}
+          <img
+            src={`/pokemonTypes/${type}.png`}
+            alt={`tipo de pokémon ${type}`}
+            class="w-16 "
+          />
+          {pokemonTypes[type]}
         </li>
       ))
     }

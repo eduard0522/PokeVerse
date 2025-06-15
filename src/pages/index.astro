@@ -1,40 +1,71 @@
 ---
 import Layout from '../layouts/Layout.astro'
-const title = "PokéVerse Ultimate";
-const description = "Descubre, explora y guarda tus Pokémon favoritos con una interfaz rápida y moderna.";
+const title = 'PokéVerse Ultimate'
+const description =
+  'Descubre, explora y guarda tus Pokémon favoritos con una interfaz rápida y moderna.'
+interface pokeFeatures {
+  title: string
+  description: string
+  path: string
+}
+const pokeFeatures: pokeFeatures[] = [
+  {
+    title: 'Consulta rápida de Pokémon',
+    description: 'Obtén detalles clave en segundos sobre cada Pokémon.',
+    path: '/pokemons/1',
+  },
+  {
+    title: 'Favoritos personalizados',
+    description: 'Guarda y organiza los Pokémon que más te gustan.',
+    path: '/favoritos',
+  },
+  {
+    title: 'Diseño interactivo',
+    description: 'Navega fácilmente con una interfaz intuitiva.',
+    path: '/pokemons/1',
+  },
+  {
+    title: 'Altamente optimizada',
+    description: 'Carga rápida y eficiente para una mejor experiencia.',
+    path: '/pokemons/1',
+  },
+]
 ---
 
 <Layout title='PokeCards'>
-    <div class="max-w-4xl mx-auto text-center flex flex-col items-center justify-center min-h-screen">
-    <h1 class="text-5xl bg-clip-text text-transparent bg-gradient-to-br from-sky-50 to-sky-800 font-bold">{title}</h1>
-    <p class="text-lg text-zinc-300 mt-4">{description}</p>
-    
-    <section class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div class="p-6 bg-gradient-to-br from-gray-950 to-cyan-950 rounded-lg shadow-lg">
-        <h2 class="text-2xl text-zinc-100 font-semibold">Consulta rápida de Pokémon</h2>
-        <p class="mt-2 text-zinc-300">Obtén detalles clave en segundos sobre cada Pokémon.</p>
-      </div>
-      
-      <div class="p-6 bg-gradient-to-br from-gray-950 to-cyan-950 rounded-lg shadow-lg">
-        <h2 class="text-2xl text-zinc-100 font-semibold">Favoritos personalizados</h2>
-        <p class="mt-2 text-zinc-300">Guarda y organiza los Pokémon que más te gustan.</p>
-      </div>
+  <div
+    class='max-w-5xl mx-auto text-center flex flex-col gap-10 items-center justify-center lg:min-h-[90vh]'
+  >
+    <h1
+      class='text-5xl bg-clip-text text-transparent bg-gradient-to-br from-sky-50 to-sky-800 font-bold'
+    >
+      {title}
+    </h1>
+    <p class='text-lg lg:text-xl text-zinc-300 mt-4'>{description}</p>
 
-      <div class="p-6 bg-gradient-to-br from-gray-950 to-cyan-950 rounded-lg shadow-lg">
-        <h2 class="text-2xl text-zinc-100 font-semibold">Diseño interactivo</h2>
-        <p class="mt-2 text-zinc-300">Navega fácilmente con una interfaz intuitiva.</p>
-      </div>
-
-      <div class="p-6 bg-gradient-to-br from-gray-950 to-cyan-950 rounded-lg shadow-lg">
-        <h2 class="text-2xl text-zinc-100 font-semibold">Altamente optimizada</h2>
-        <p class="mt-2 text-zinc-300">Carga rápida y eficiente para una mejor experiencia.</p>
-      </div>
+    <section class='grid grid-cols-1 md:grid-cols-2 gap-6'>
+      {
+        pokeFeatures.map((feature) => (
+          <a href={feature.path}>
+            <div class='p-6 bg-gradient-to-br from-gray-950 to-cyan-950 rounded-lg shadow-lg cursor-pointer hover:scale-105 transition-all duration-300  ease-out'>
+              <h2 class='text-2xl text-zinc-100 font-semibold'>
+                {feature.title}
+              </h2>
+              <p class='mt-2 text-zinc-300 md:text-lg'>{feature.description}</p>
+            </div>
+          </a>
+        ))
+      }
     </section>
-
-    <div class="mt-12">
-      <p class="text-lg text-zinc-300">¡Explora el PokéVerse y encuentra tu Pokémon <a href="/favoritos" class="underline text-sky-600"> favorito! </a> </p>
+    <div>
+      <p class='text-lg lg:text-xl text-zinc-300'>
+        ¡Explora el PokéVerse y encuentra tu Pokémon <a
+          href='/favoritos'
+          class='underline capitalize text-xl text-sky-500'
+        >
+          favorito!
+        </a>
+      </p>
     </div>
   </div>
-  
 </Layout>
-
