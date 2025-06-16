@@ -6,7 +6,7 @@ import PokemonCard from '@components/pokemons/PokemonCard.astro'
 import Title from '@components/titles/Title.astro'
 
 export const getStaticPaths = (async ({ paginate }) => {
-  const data = await fetch('https://pokeapi.co/api/v2/pokemon?limit=151')
+  const data = await fetch('https://pokeapi.co/api/v2/pokemon?limit=20')
   const { results } = (await data.json()) as PokemonListResponse
   return paginate(results, { pageSize: 10 })
 }) satisfies GetStaticPaths

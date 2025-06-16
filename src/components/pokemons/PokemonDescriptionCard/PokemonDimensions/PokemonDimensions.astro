@@ -1,0 +1,16 @@
+---
+import Parragraph from "./Parragraph.astro"
+
+interface Pros{
+  height:string
+  weight:string
+}
+
+const { height , weight} = Astro.props
+const pokemonWeight = parseFloat(weight) / 10
+const pokemonHeight = parseFloat(height) / 10
+---
+ <div class="flex flex-col items-start gap-4"> 
+      <Parragraph content="altura" value={pokemonHeight} unit="metros" />
+      <Parragraph content="peso" value={pokemonWeight} unit="kilogramos" />
+</div>

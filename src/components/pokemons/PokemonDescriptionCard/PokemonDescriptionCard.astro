@@ -1,0 +1,108 @@
+---
+import TitleCard from './TitleCard.astro'
+import TypesTags from './TypesTags.astro'
+import Description from './Description.astro'
+import BtnBack from './btns/BtnBack.astro'
+import PokemonVisual from './PokemonVisual.astro'
+
+interface Props {
+  name: string
+  url: string
+  description: string
+  types: string[]
+  id: string
+  weight: string
+  height: string
+}
+
+const { name, url, description, types, id, height, weight } = Astro.props
+---
+
+<a
+  id='card'
+  href=`/pokemons/${name}`
+  class='flex- flex-col items-center justify-center group transition-all
+  p-2 md:pt-8 rounded-2xl'
+>
+  <article class='flex flex-col items-center'>
+    <PokemonVisual name={name} id={id} types={types} url={url} />
+    <div>
+      <TitleCard name={name} />
+      <TypesTags types={types} />
+      <Description description={description} />
+      <BtnBack />
+    </div>
+  </article>
+</a>
+
+<script>
+  import type { FavoritePokemon as Favorite } from '../../../interfaces/FavoritePokemon'
+
+  const getStoredFavorites = () => {
+    const storedFavorites = localStorage.getItem('favorites')
+    let favoritesArray = storedFavorites
+      ? JSON.parse(storedFavorites).favorites
+      : []
+    return favoritesArray
+  }
+
+  const setStoredFavorites = (newStored: Favorite[]): void => {
+    localStorage.setItem('favorites', JSON.stringify({ favorites: newStored }))
+  }
+
+  const validateFavorite = (pokemonId: string) => {
+    let storedFavorites = getStoredFavorites()
+    const isFavorite = storedFavorites?.some(
+      (pokemon: Favorite) => pokemon.pokemonId === pokemonId
+    )
+    return isFavorite
+  }
+
+  const handleFavorite = (pokemonName: string, pokemonId: string) => {
+    let storedFavorites = getStoredFavorites()
+
+    const isFavorite = validateFavorite(pokemonId)
+    if (!isFavorite) {
+      storedFavorites.push({ pokemonName, pokemonId })
+    } else {
+      storedFavorites = storedFavorites.filter(
+        (fav: Favorite) => fav.pokemonId !== pokemonId
+      )
+    }
+    setStoredFavorites(storedFavorites)
+  }
+
+  const setClassListHidden = (pokemonId: string): void => {
+    const heartFill = document.querySelector('.heart-fill')
+    const heartOutline = document.querySelector('.heart-outline')
+    const isFavorite = validateFavorite(pokemonId)
+
+    if (!heartOutline || !heartFill) return
+
+    if (isFavorite) {
+      heartFill.classList.remove('hidden')
+      heartOutline.classList.add('hidden')
+    } else {
+      heartFill.classList.add('hidden')
+      heartOutline.classList.remove('hidden')
+    }
+  }
+
+  const handlePageLoad = () => {
+    const btnFavorite = document.querySelector('#btn-favorite')
+
+    if (!btnFavorite || !(btnFavorite instanceof HTMLButtonElement)) return
+
+    const pokemonName = btnFavorite.dataset.name
+    const pokemonId = btnFavorite.dataset.id
+
+    if (!pokemonId || !pokemonName) return
+    setClassListHidden(pokemonId)
+
+    btnFavorite.addEventListener('click', () => {
+      handleFavorite(pokemonName, pokemonId)
+    })
+  }
+
+  document.addEventListener('astro:page-load', handlePageLoad)
+</script>

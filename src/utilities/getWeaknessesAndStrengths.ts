@@ -34,11 +34,18 @@ const getWeaknessesAndStrengths = async (): Promise<
     return [];
   }
 };
-
-export const filterByType = async (types: string[]): Promise<
-  { type: string; weaknesses: string[]; strengths: string[] }[]
-> => {
+const filterByType = async (types: string[]): Promise<{ type: string; weaknesses: string[]; strengths: string[] }[]> => {
   const data = await getWeaknessesAndStrengths();
-
   return (data ?? []).filter(d => types.includes(d.type));
 };
+
+
+export const processTypesData = async (types : string []) => {
+  const filteredData = await filterByType(types); 
+
+  const allStrengths = filteredData.flatMap(d => d.strengths);
+  const allWeaknesses = filteredData.flatMap(d => d.weaknesses);
+
+  return { allStrengths, allWeaknesses };
+};
+

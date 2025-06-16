@@ -1,0 +1,28 @@
+---
+import { processTypesData } from 'src/utilities/getWeaknessesAndStrengths'
+import PokemonImage from './PokemonImage.astro'
+import TypesTags from './TypesTags.astro'
+import WeaknessesAndStrengths from './WeaknessesAndStrengths.astro'
+
+const { name, url, id, types } = Astro.props
+const data = await processTypesData(types)
+---
+
+<section class='flex flex-col items-center md:flex-row gap-2'>
+  <WeaknessesAndStrengths title='Fortalezas 💪🏽' orderStyle='order-2 md:order-1'>
+    <div>
+      <TypesTags types={data.allStrengths} columns={true} />
+    </div>
+  </WeaknessesAndStrengths>
+
+  <PokemonImage name={name} url={url} id={id} />
+
+  <WeaknessesAndStrengths
+    title='Debilidades 🚨'
+    orderStyle='order-3'
+  >
+    <div>
+      <TypesTags types={data.allWeaknesses} columns={true} />
+    </div>
+  </WeaknessesAndStrengths>
+</section>

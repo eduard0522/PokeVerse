@@ -1,0 +1,16 @@
+---
+
+interface Props{
+  title : string
+  orderStyle : string
+}
+const { title, orderStyle } = Astro.props
+---
+
+<div class:list={['flex flex-col items-center mt-4 md:mt-8', orderStyle]}
+ >
+    <h2 class="text-zinc-100 text-2xl font-bold"> {title} </h2>
+    <slot>
+
+    </slot>
+</div>

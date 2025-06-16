@@ -1,0 +1,24 @@
+---
+import BtnFavorite from './btns/BtnFavorite.astro'
+
+interface Props {
+  name: string
+  url: string
+  id: string
+}
+const props: Props = Astro.props // Tipado explícito
+const { name, url, id } = props
+
+const pokemonId = url.split('/').at(-2)
+const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemonId}.png`
+---
+
+<div class='relative order-1 md:order-2'>
+  <BtnFavorite name={name} id={id} />
+  <img
+    alt='Imagén del pokémon'
+    transition:name={`${name}-image`}
+    src={imageUrl}
+    class='mx-auto w-xl h-auto'
+  />
+</div>

@@ -3,7 +3,7 @@ import type { GetStaticPaths } from "astro";
 
 import Layout from "../../layouts/Layout.astro";
 import {getPokemonData } from "..//../utilities/getData"
-import PokemonCardDescription from "@components/pokemons/PokemonCardDescription.astro";
+import PokemonDescriptionCard from "@components/pokemons/PokemonDescriptionCard/PokemonDescriptionCard.astro";
 
 
 export const getStaticPaths = ( async () => {
@@ -16,7 +16,8 @@ const { name , url , descripcion , types , id , height , weight } = Astro.props
 ---
 <Layout title=`Pokémon - #${id} ${name}` description= `Información sobre el pokémon ${name}` srcImage={url}>
   <section aria-label=`Datos de Pokémon ${name}` class="flex flex-col justify-center items-center gap-4  pb-12">
-      <PokemonCardDescription  name={name} url={url} isBig  description = {descripcion} types = {types} id={id} height={height} weight={weight} />
+      <PokemonDescriptionCard  name={name} url={url}   description = {descripcion} types = {types} id={id} height={height} weight={weight} />
+
   </section>
  
 </Layout>

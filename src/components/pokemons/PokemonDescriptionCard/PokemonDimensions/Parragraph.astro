@@ -1,0 +1,10 @@
+---
+interface Props{
+  content : string
+  value : number
+  unit : string
+}
+const { content ,  value , unit} = Astro.props
+---
+ 
+ <p class="text-lg md:text-xl text-zinc-100 block"> <span class="font-semibold text-sky-500"> {content}: </span> {value} {unit} </h>  

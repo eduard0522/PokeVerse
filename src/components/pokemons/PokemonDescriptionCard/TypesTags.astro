@@ -1,5 +1,4 @@
 ---
-import { boolean } from 'astro:schema'
 import { pokemonTypes } from 'src/utilities/pokemonTypes'
 
 interface Props {
@@ -9,24 +8,25 @@ interface Props {
 
 const { types , columns } = Astro.props
 ---
-
-<div class="mx-auto">
   <ul
-    class:list={['text-slate-100 capitalize flex justify-center gap-2 items-center' , {'grid grid-cols-2' : columns}]}
+class:list={['text-slate-100 capitalize flex flex-wrap justify-center items-center',
+  {'md:grid md:grid-flow-col md:auto-cols-[minmax(60px,1fr)] md:grid-rows-[repeat(4,minmax(60px,auto))] gap-2 md:gap-4' : columns}
+]}
+
   >
     {
       types?.map((type: string) => (
         <li
-          class={`px-4 py-2 text-lg rounded-md text-white font-bold text-center`}
+          class={`md:px-4 md:py-2 text-base md:text-lg rounded-md text-white font-bold text-center`}
         >
           <img
             src={`/pokemonTypes/${type}.png`}
             alt={`tipo de pokémon ${type}`}
-            class="w-16 "
+            class=" w-10 md:w-16 "
           />
           {pokemonTypes[type]}
         </li>
       ))
     }
   </ul>
-</div>
+

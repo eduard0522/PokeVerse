@@ -5,7 +5,7 @@ import type { PokemonType } from "../interfaces/pokemon-type";
 
 export const getPokemonData = async (paramReturn:string) => {
   try{
-    const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
+    const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=20");
     const { results } = await response.json() as PokemonListResponse;
 
      const pokemonData = await Promise.all(
